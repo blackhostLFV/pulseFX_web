@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PulseFX — Membresías</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/pulsefx.css">
+<link rel="stylesheet" href="css/pulsefx-refine.css">
+<style>
+/* ===== Membresías — adiciones de página (namespaced) ===== */
+.mhero{padding:72px 0 30px}
+.mhero .container{position:relative;z-index:2}
+.mhero .eyebrow{display:inline-block;margin-bottom:16px}
+.mhero h1{font-size:clamp(40px,5.4vw,70px);font-weight:800;text-align:center}.mhero h1 .ac{color:var(--blue-l)}
+.mhero .lead{font-size:18px;color:#9AA3B2;margin:22px auto 30px;max-width:600px;text-align:center}
+.mhero .hero-cta{justify-content:center}
+/* hero — par de cards flotantes (Silver/Gold) */
+.mfan{position:relative;height:430px;margin-top:46px;display:flex;align-items:center;justify-content:center;perspective:1400px}
+.mfcard{position:absolute;left:50%;width:300px;border-radius:24px;padding:26px;border:1px solid}
+.mfcard .nm{font-weight:800;font-size:22px;letter-spacing:-.02em}
+.mfcard .pr{font-size:34px;font-weight:800;margin-top:8px}.mfcard .pr span{font-size:13px;font-weight:600;opacity:.55}
+.mfcard .bn{margin-top:14px;font-size:12px;font-weight:700;border-radius:11px;padding:10px 13px}
+.mfcard ul{list-style:none;margin-top:16px;display:flex;flex-direction:column;gap:9px}
+.mfcard li{display:flex;gap:9px;align-items:center;font-size:12.5px;font-weight:600}
+.mfcard li i{width:16px;height:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.mfcard li i svg{width:9px;height:9px;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;fill:none}
+.mfcard.silver{transform:translateX(-96%) rotate(-7deg);background:rgba(255,255,255,.94);border-color:#E7E9EE;color:#0E1116;box-shadow:0 32px 70px -28px rgba(20,35,70,.6);z-index:1}
+.mfcard.silver .bn{background:var(--soft);color:var(--blue)}
+.mfcard.silver li i{background:#EAF0F9;color:var(--blue)}.mfcard.silver li i svg{stroke:var(--blue)}
+.mfcard.gold{transform:translateX(-4%) rotate(5deg) translateY(-16px);background:#0E1116;border-color:rgba(255,255,255,.1);color:#fff;box-shadow:0 42px 90px -30px rgba(0,0,0,.72);z-index:2}
+.mfcard.gold .pr span{color:rgba(255,255,255,.55)}
+.mfcard.gold .bn{background:linear-gradient(135deg,rgba(232,184,59,.2),rgba(201,145,42,.12));color:#F0C75A;border:1px solid rgba(232,184,59,.3)}
+.mfcard.gold li i{background:rgba(46,114,240,.25);color:var(--blue-l)}.mfcard.gold li i svg{stroke:var(--blue-l)}
+.mfcard .tag{position:absolute;top:-11px;right:20px;font-size:10px;font-weight:800;letter-spacing:.07em;padding:5px 11px;border-radius:999px;background:var(--blue);color:#fff}
+/* (.plan-bonus y .plan .ck svg ahora viven en pulsefx.css, compartidos con el home) */
+.plans-note{text-align:center;max-width:660px;margin:30px auto 0;font-size:13px;color:var(--ink3);line-height:1.6}
+/* cards de beneficio con micro-UI */
+.bgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.bcard{padding:26px 24px;display:flex;flex-direction:column}
+.bcard .bh{display:flex;align-items:center;gap:13px;margin-bottom:8px}
+.bcard .bt-ic{width:44px;height:44px;border-radius:13px;background:var(--soft);border:1px solid rgba(46,114,240,.2);display:flex;align-items:center;justify-content:center;flex:0 0 auto;color:var(--blue)}
+.dark .bcard .bt-ic{color:var(--blue-l)}
+.bcard .bt-ic svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.bcard h3{font-size:17px;font-weight:800;color:var(--ink)}
+.bcard .bd{font-size:13.5px;color:var(--ink2);margin:0 0 20px;line-height:1.5}
+.bcard .viz-wrap{margin-top:auto}
+.cui-bal{width:100%;border-radius:14px;padding:16px;background:linear-gradient(140deg,var(--azure),var(--blue-d));color:#fff;position:relative;overflow:hidden}
+.cui-bal .g{position:absolute;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.16);right:-36px;top:-44px}
+.cui-bal .l{font-size:10px;opacity:.85;font-weight:600;position:relative}
+.cui-bal .v{font-size:26px;font-weight:800;margin-top:3px;position:relative}
+.cui-bal .c{display:inline-block;margin-top:9px;font-size:10.5px;font-weight:700;background:rgba(255,255,255,.22);padding:3px 9px;border-radius:7px;position:relative}
+.cui-bal .sm{font-size:10.5px;opacity:.85;margin-top:10px;position:relative}
+/* comparativa */
+.cmp{border:1px solid var(--bd);border-radius:24px;overflow:hidden;background:var(--panel);max-width:900px;margin:0 auto;box-shadow:var(--sh)}
+.cmp .crow{display:grid;grid-template-columns:1.5fr 1fr 1fr;align-items:center}
+.cmp .crow + .crow{border-top:1px solid var(--bd)}
+.cmp .crow.h{background:rgba(255,255,255,.03)}
+.light .cmp .crow.h{background:#F4F6F9}
+.cmp .cc{padding:16px 22px;font-size:14px;color:var(--ink2);text-align:center}
+.cmp .cc.lab{text-align:left;font-weight:700;color:var(--ink)}
+.cmp .crow.h .cc{font-weight:800;color:var(--ink);font-size:15px}
+.cmp .cc.g{background:rgba(46,114,240,.06)}
+.dark .cmp .cc.g{background:rgba(46,114,240,.1)}
+.cmp .crow.h .cc.g{color:var(--blue-l)}.light .cmp .crow.h .cc.g{color:var(--blue)}
+.cmp .gbadge{font-size:9px;font-weight:800;background:var(--blue);color:#fff;padding:3px 8px;border-radius:999px;margin-left:7px;vertical-align:middle;letter-spacing:.04em}
+.cmp .cc b{color:var(--ink);font-weight:800}
+/* pasos */
+.msteps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.mstep{padding:26px 24px;position:relative}
+.mstep .no{font-size:13px;font-weight:800;color:var(--blue);letter-spacing:.06em}.dark .mstep .no{color:var(--blue-l)}
+.mstep .mi{width:46px;height:46px;border-radius:13px;background:var(--soft);display:flex;align-items:center;justify-content:center;color:var(--blue);margin:14px 0 16px}.dark .mstep .mi{color:var(--blue-l)}
+.mstep .mi svg{width:23px;height:23px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.mstep h4{font-size:16px;font-weight:800;color:var(--ink)}
+.mstep p{font-size:13px;color:var(--ink2);margin-top:7px;line-height:1.5}
+@media(max-width:960px){.bgrid,.msteps{grid-template-columns:1fr 1fr}.mfan{transform:scale(.92)}}
+@media(max-width:600px){
+  .bgrid,.msteps{grid-template-columns:1fr}
+  .cmp .cc{padding:13px 12px;font-size:12.5px}.cmp .cc.lab{padding-left:16px}
+  .mfan{height:auto;flex-direction:column;gap:20px;perspective:none;margin-top:40px}
+  .mfcard{position:static;transform:none;width:100%;max-width:330px}
+}
+</style>
+</head>
+<body>
+<div class="topbar"><div class="container"><span>Acceso estructurado al mercado &middot; estrategias de fase inicial en brokers aliados</span><b><a href="registro.html">Solicitar acceso &rarr;</a></b></div></div>
+<header><div class="hw">
+  <a href="index.html" class="logo" aria-label="PulseFX"><span class="logo-img"></span>PulseFX</a>
+  <nav class="main"><a href="index.html">Inicio</a><a href="estrategias.html">Fondos</a><a href="herramientas.html">Herramientas</a><a href="cuentas.html">Cuentas</a><a class="on" href="membresias.html">Membres&iacute;as</a></nav>
+  <div class="head-cta"><span class="lang">&#127466;&#127480; ES</span><a href="#planes" class="btn btn-ghost btn-xs">Comparar planes</a><a href="registro.html" class="btn btn-primary btn-xs">Agendar cita</a></div>
+</div></header>
+
+<!-- HERO (oscuro) -->
+<section class="hero dark mhero">
+  <div class="ambient"><div class="blob" style="width:560px;height:560px;background:radial-gradient(circle,rgba(46,114,240,.32),transparent 70%);top:-160px;right:-60px"></div><div class="blob" style="width:420px;height:420px;background:radial-gradient(circle,rgba(98,196,251,.16),transparent 70%);top:160px;left:-120px"></div></div>
+  <div class="container">
+    <span class="eyebrow reveal d1">Membres&iacute;as</span>
+    <h1 class="reveal d2">Tu capa de acceso <span class="ac">al ecosistema</span></h1>
+    <p class="lead reveal d3">Acceso a estrategias por Copy Trading, canales VIP, sesiones y seguimiento. Cada plan es un punto de entrada distinto a PulseFX: a m&aacute;s capa, m&aacute;s acceso y m&aacute;s exposici&oacute;n al ecosistema.</p>
+    <div class="hero-cta reveal d4"><a href="#planes" class="btn btn-primary">Ver planes</a><a href="registro.html" class="btn btn-ghost">Agendar cita</a></div>
+  </div>
+  <div class="mfan reveal d3">
+    <div class="mfcard silver">
+      <div class="nm">Silver</div>
+      <div class="pr">546 <span>USDT / a&ntilde;o</span></div>
+      <div class="bn">Bono en cuenta real &middot; 300 USDT</div>
+      <ul>
+        <li><i><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></i>1 estrategia operativa</li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></i>1 canal VIP operativo</li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></i>Soporte operativo b&aacute;sico</li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></i>Acceso a recursos internos</li>
+      </ul>
+    </div>
+    <div class="mfcard gold">
+      <span class="tag">POPULAR</span>
+      <div class="nm">Gold</div>
+      <div class="pr">990 <span>USDT / a&ntilde;o</span></div>
+      <div class="bn">Bono en cuenta real &middot; 500 USDT</div>
+      <ul>
+        <li><i><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></i>Hasta 3 estrategias operativas</li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></i>2 canales VIP operativos</li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></i>Soporte operativo prioritario</li>
+        <li><i><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></i>Acceso prioritario a nuevas estrategias</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PLANES / VALOR (claro) -->
+<section id="planes" class="sec light"><div class="container">
+  <div class="sec-head center sr"><span class="eyebrow">Planes y valor</span><h2>Elige la membres&iacute;a que abre tu acceso</h2><p>Las membres&iacute;as entregan acceso al ecosistema, estrategias por Copy Trading, canales y sesiones. El plan anual incluye un bono en cuenta real.</p></div>
+  <div class="plans sr">
+    <div class="card plan"><span class="ptag">Base</span><div class="pn">Silver</div>
+      <div class="price">546 <span>USDT</span></div><div class="annual">Plan anual</div>
+      <div class="plan-bonus"><span class="bi"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M3 12h18M12 8v13"/><path d="M12 8S10 3.5 8 4.8 9.5 8 12 8zM12 8s2-4.5 4-3.2S14.5 8 12 8z"/></svg></span><div class="bt">Bono en cuenta real<b>300 USDT</b></div></div>
+      <p class="desc">Primera capa de acceso al ecosistema PulseFX.</p>
+      <ul>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>Acceso a 1 estrategia operativa habilitada</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>1 canal VIP operativo</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>Soporte operativo b&aacute;sico</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>Acceso a recursos internos</li>
+      </ul>
+      <a href="registro.html" class="btn btn-ghost">Aplicar a Silver</a></div>
+    <div class="card plan pop"><span class="ptag">POPULAR</span><div class="pn">Gold</div>
+      <div class="price">990 <span>USDT</span></div><div class="annual">Plan anual</div>
+      <div class="plan-bonus"><span class="bi"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M3 12h18M12 8v13"/><path d="M12 8S10 3.5 8 4.8 9.5 8 12 8zM12 8s2-4.5 4-3.2S14.5 8 12 8z"/></svg></span><div class="bt">Bono en cuenta real<b>500 USDT</b></div></div>
+      <p class="desc">M&aacute;s estrategias, m&aacute;s acceso y prioridad en el ecosistema.</p>
+      <ul>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>Acceso a hasta 3 estrategias operativas</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>2 canales VIP operativos</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>Soporte operativo prioritario</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span>Acceso prioritario a nuevas estrategias</li>
+      </ul>
+      <a href="registro.html" class="btn gold-btn">Aplicar a Gold</a></div>
+  </div>
+  <p class="plans-note sr">El bono en cuenta real se entrega con el plan anual y puede usarse en una cuenta real PAMM de PulseFX o en tu cuenta de broker para copy trading, seg&uacute;n tu preferencia y condiciones vigentes. Los alcances de cada membres&iacute;a pueden ajustarse seg&uacute;n etapa operativa y condiciones vigentes.</p>
+</div></section>
+
+<!-- QUÉ INCLUYE / CARDS CON MICRO-UI (claro) -->
+<section class="sec light" style="padding-top:0"><div class="container">
+  <div class="sec-head center sr"><span class="eyebrow">Qu&eacute; incluye tu membres&iacute;a</span><h2>Acceso real a cada parte del ecosistema</h2><p>Cada beneficio es una secci&oacute;n viva de la plataforma. As&iacute; se ve por dentro.</p></div>
+  <div class="bgrid sr">
+
+    <!-- Canales VIP de señales -->
+    <div class="card bcard">
+      <div class="bh"><span class="bt-ic"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9z"/><path d="M10.5 21a1.8 1.8 0 0 0 3 0"/></svg></span><h3>Canales VIP de se&ntilde;ales</h3></div>
+      <p class="bd">Se&ntilde;ales operativas en vivo en tu canal privado. Silver incluye 1 canal; Gold, 2.</p>
+      <div class="viz-wrap"><div class="cui">
+        <div class="cui-row"><span class="i"><svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-9"/><path d="M16 7h4v4"/></svg></span><div class="t">Long XAU/USD<small>Pulse Gold I &middot; 0.50 lot</small></div><span class="cui-pill">Se&ntilde;al</span></div>
+        <div class="cui-row"><span class="i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div class="t">BTC al alza +5%<small>Pulse BTC I</small></div><span class="cui-pill">En vivo</span></div>
+        <div class="cui-row"><span class="i"><svg viewBox="0 0 24 24"><path d="M4 12l5 5L20 6"/></svg></span><div class="t">Cierre parcial<small>Pulse Gold II</small></div><span class="cui-pill">+1.2%</span></div>
+      </div></div>
+    </div>
+
+    <!-- Estrategias por Copy Trading -->
+    <div class="card bcard">
+      <div class="bh"><span class="bt-ic"><svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-9"/><path d="M16 7h4v4"/></svg></span><h3>Estrategias por Copy</h3></div>
+      <p class="bd">Conecta estrategias reales a tu cuenta de broker. Silver: 1 estrategia. Gold: hasta 3.</p>
+      <div class="viz-wrap"><div class="cui">
+        <div class="cui-row"><span class="i" style="font-size:9px;font-weight:800">XAU</span><div class="t">Pulse Gold I<small>Copy &middot; XAU/USD</small></div><span class="b">+18.4%</span></div>
+        <div class="cui-row"><span class="i" style="font-size:9px;font-weight:800">BTC</span><div class="t">Pulse BTC I<small>Copy &middot; BTC/USD</small></div><span class="b">+22.7%</span></div>
+        <div class="cui-row"><span class="i" style="font-size:9px;font-weight:800">XAU</span><div class="t">Pulse Gold II<small>Copy &middot; XAU/USD</small></div><span class="b">+14.1%</span></div>
+      </div></div>
+    </div>
+
+    <!-- Acompañamiento y soporte -->
+    <div class="card bcard">
+      <div class="bh"><span class="bt-ic"><svg viewBox="0 0 24 24"><path d="M4 13a8 8 0 0 1 16 0"/><rect x="2.5" y="13" width="4" height="7" rx="1.5"/><rect x="17.5" y="13" width="4" height="7" rx="1.5"/><path d="M20 20a3 3 0 0 1-3 3h-3"/></svg></span><h3>Sesiones y soporte</h3></div>
+      <p class="bd">Acompa&ntilde;amiento del equipo y la comunidad. Gold suma sesiones VIP y soporte prioritario.</p>
+      <div class="viz-wrap"><div class="cui">
+        <div class="cui-row"><span class="i"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg></span><div class="t">Sesi&oacute;n VIP<small>Hoy &middot; 19:00</small></div><span class="cui-pill">En vivo</span></div>
+        <div class="cui-row"><span class="i"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.4"/><path d="M3.5 20c0-3 2.4-5 5.5-5s5.5 2 5.5 5"/><path d="M15 20c0-2 1-3.5 2.5-4"/></svg></span><div class="t">Sesi&oacute;n grupal<small>Ma&ntilde;ana &middot; 18:00</small></div><span class="cui-pill">Pr&oacute;xima</span></div>
+        <div class="cui-row"><span class="i"><svg viewBox="0 0 24 24"><path d="M21 12a8 8 0 0 1-11.5 7.2L3 21l1.8-6.5A8 8 0 1 1 21 12z"/></svg></span><div class="t">Soporte operativo<small>respuesta prioritaria</small></div></div>
+      </div></div>
+    </div>
+
+    <!-- Bono en cuenta real -->
+    <div class="card bcard">
+      <div class="bh"><span class="bt-ic"><svg viewBox="0 0 24 24"><rect x="3" y="8" width="18" height="13" rx="2"/><path d="M3 12h18M12 8v13"/><path d="M12 8S10 3.5 8 4.8 9.5 8 12 8zM12 8s2-4.5 4-3.2S14.5 8 12 8z"/></svg></span><h3>Bono en cuenta real</h3></div>
+      <p class="bd">Con el plan anual recibes saldo para una cuenta real PAMM o tu broker para copy.</p>
+      <div class="viz-wrap"><div class="cui-bal"><div class="g"></div><div class="l">Bono acreditado &middot; plan anual</div><div class="v">+500 USDT</div><span class="c">Gold anual</span><div class="sm">Silver anual &middot; +300 USDT</div></div></div>
+    </div>
+
+    <!-- Recursos internos -->
+    <div class="card bcard">
+      <div class="bh"><span class="bt-ic"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.6"/><rect x="14" y="3" width="7" height="7" rx="1.6"/><rect x="3" y="14" width="7" height="7" rx="1.6"/><rect x="14" y="14" width="7" height="7" rx="1.6"/></svg></span><h3>Recursos internos</h3></div>
+      <p class="bd">Material para entender la estructura, los ciclos y operar con criterio.</p>
+      <div class="viz-wrap"><div class="cui-grid">
+        <div class="cui-tile"><span class="i"><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 0 1 2-2h11v16H6a2 2 0 0 0-2 2z"/><path d="M17 3l3 0v18l-3-2"/></svg></span><div class="nm">Centro PAMM</div><div class="ds">reglas y ciclos</div></div>
+        <div class="cui-tile"><span class="i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M10 8.5l5 3.5-5 3.5z"/></svg></span><div class="nm">Academia</div><div class="ds">gu&iacute;as en video</div></div>
+        <div class="cui-tile"><span class="i"><svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-9"/><path d="M16 7h4v4"/></svg></span><div class="nm">Perspectiva</div><div class="ds">contexto de mercado</div></div>
+        <div class="cui-tile"><span class="i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.6 1.6 0 0 0-2.7 1.1V21a2 2 0 0 1-4 0v-.1A1.6 1.6 0 0 0 6.7 19l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A1.6 1.6 0 0 0 3 13.6H3a2 2 0 0 1 0-4h.1A1.6 1.6 0 0 0 4.6 7"/></svg></span><div class="nm">Herramientas</div><div class="ds">simuladores</div></div>
+      </div></div>
+    </div>
+
+    <!-- Acceso prioritario a nuevas estrategias -->
+    <div class="card bcard">
+      <div class="bh"><span class="bt-ic"><svg viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg></span><h3>Prioridad en nuevas estrategias</h3></div>
+      <p class="bd">Gold accede antes a las estrategias que se incorporan al ecosistema.</p>
+      <div class="viz-wrap"><div class="cui">
+        <div class="cui-row"><span class="i"><svg viewBox="0 0 24 24"><path d="M12 3l2.6 5.6 6.4.6-4.8 4.2 1.4 6.2L12 16.9 6.4 19.6 7.8 13.4 3 9.2l6.4-.6z"/></svg></span><div class="t">Nueva estrategia<small>incorporaci&oacute;n al ecosistema</small></div><span class="cui-pill">Gold primero</span></div>
+        <div class="cui-row"><span class="i"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span><div class="t">Acceso anticipado<small>plan Gold</small></div><span class="cui-pill">Prioritario</span></div>
+        <div class="cui-row"><span class="i"><svg viewBox="0 0 24 24"><path d="M16 11a4 4 0 1 0-8 0"/><path d="M3 21a7 7 0 0 1 18 0"/></svg></span><div class="t">Plan Silver<small>acceso est&aacute;ndar</small></div><span class="cui-pill">Est&aacute;ndar</span></div>
+      </div></div>
+    </div>
+
+  </div>
+</div></section>
+
+<!-- COMPARATIVA (oscuro) -->
+<section class="sec dark">
+  <div class="ambient"><div class="blob" style="width:480px;height:480px;background:radial-gradient(circle,rgba(46,114,240,.15),transparent 70%);top:-40px;left:50%;transform:translateX(-50%)"></div></div>
+  <div class="container">
+  <div class="sec-head center sr"><span class="eyebrow">Comparativa</span><h2 style="color:#fff">Silver y Gold, lado a lado</h2><p>La diferencia est&aacute; en el nivel de acceso, seguimiento y exposici&oacute;n al ecosistema.</p></div>
+  <div class="cmp sr">
+    <div class="crow h"><div class="cc lab">Concepto</div><div class="cc">Silver</div><div class="cc g">Gold<span class="gbadge">POPULAR</span></div></div>
+    <div class="crow"><div class="cc lab">Precio anual</div><div class="cc"><b>546</b> USDT</div><div class="cc g"><b>990</b> USDT</div></div>
+    <div class="crow"><div class="cc lab">Bono en cuenta real</div><div class="cc"><b>300</b> USDT</div><div class="cc g"><b>500</b> USDT</div></div>
+    <div class="crow"><div class="cc lab">Estrategias operativas</div><div class="cc">1</div><div class="cc g">Hasta 3</div></div>
+    <div class="crow"><div class="cc lab">Canales VIP de se&ntilde;ales</div><div class="cc">1</div><div class="cc g">2</div></div>
+    <div class="crow"><div class="cc lab">Soporte operativo</div><div class="cc">B&aacute;sico</div><div class="cc g">Prioritario</div></div>
+    <div class="crow"><div class="cc lab">Nuevas estrategias</div><div class="cc">Est&aacute;ndar</div><div class="cc g">Acceso prioritario</div></div>
+  </div>
+  </div>
+</section>
+
+<!-- CÓMO ACTIVAR (claro) -->
+<section class="sec light"><div class="container">
+  <div class="sec-head center sr"><span class="eyebrow">C&oacute;mo activar</span><h2>De membres&iacute;a a estrategia operando</h2><p>Una vez activa tu membres&iacute;a, conectas una estrategia a tu propia cuenta de broker.</p></div>
+  <div class="msteps sr">
+    <div class="card mstep"><div class="no">PASO 01</div><div class="mi"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/><circle cx="7" cy="14.5" r="1"/></svg></div><h4>Activa tu membres&iacute;a</h4><p>Elige Silver o Gold seg&uacute;n el nivel de acceso que necesitas.</p></div>
+    <div class="card mstep"><div class="no">PASO 02</div><div class="mi"><svg viewBox="0 0 24 24"><path d="M3 17l5-5 4 4 8-9"/><path d="M16 7h4v4"/></svg></div><h4>Elige tu estrategia</h4><p>Selecciona una estrategia habilitada, como Pulse Gold o Pulse BTC.</p></div>
+    <div class="card mstep"><div class="no">PASO 03</div><div class="mi"><svg viewBox="0 0 24 24"><path d="M9 12a3 3 0 0 1 3-3h2a3 3 0 0 1 0 6"/><path d="M15 12a3 3 0 0 1-3 3h-2a3 3 0 0 1 0-6"/></svg></div><h4>Vincula tu cuenta</h4><p>Conecta una cuenta real en un broker aliado por el proceso seguro de la plataforma.</p></div>
+    <div class="card mstep"><div class="no">PASO 04</div><div class="mi"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/><path d="M7 12l3-3 2 2 4-5"/></svg></div><h4>Monitorea y opera</h4><p>Sigue cada movimiento desde MT4/MT5 o el social trading del broker.</p></div>
+  </div>
+</div></section>
+
+<!-- CTA (banda azul) -->
+<section id="cta" class="sec dark"><div class="container">
+  <div class="ctaband sr"><h2>Empieza por tu capa de acceso</h2><p>Aplica a Silver o Gold, completa el filtro inicial y nuestro equipo revisar&aacute; tu perfil.</p><div class="hero-cta"><a href="registro.html" class="btn btn-white">Agendar cita</a><a href="registro.html" class="btn btn-line">Solicitar acceso</a></div></div>
+</div></section>
+
+<footer><div class="container">
+  <div class="f-top">
+    <div class="f-col f-brand"><a href="index.html" class="logo" aria-label="PulseFX" style="color:#0E1116"><span class="logo-img"></span>PulseFX</a><p>Acceso estructurado al mercado: estrategias reales operadas en brokers aliados, con acompa&ntilde;amiento y seguimiento.</p></div>
+    <div class="f-col"><h4>Producto</h4><a href="membresias.html">Membres&iacute;as</a><a href="estrategias.html">Estrategias</a><a href="pamm.html">PAMM privada</a><a href="index.html#cuentas">Managers</a></div>
+    <div class="f-col"><h4>Compa&ntilde;&iacute;a</h4><a href="nosotros.html">Qui&eacute;nes somos</a><a href="historias.html">Historias de clientes</a><a href="faq.html">FAQ</a><a href="registro.html">Contacto</a></div>
+    <div class="f-col"><h4>Acceso</h4><a href="registro.html">Agendar cita</a><a href="registro.html">Solicitar acceso</a><a href="#planes">Ver membres&iacute;as</a></div>
+  </div>
+  <p class="disclaimer">AVISO DE RIESGO: operar en mercados financieros implica un riesgo significativo de p&eacute;rdida y no es adecuado para todos los inversionistas. Los resultados pasados no garantizan rendimientos futuros. Contenido informativo, no constituye asesor&iacute;a financiera. [Texto legal final a cargo del cliente.]</p>
+  <div class="f-bottom"><span>&copy; 2026 PULSEFX</span><span>T&Eacute;RMINOS &middot; PRIVACIDAD &middot; AVISO DE RIESGO</span></div>
+</div></footer>
+
+<script>
+/* Reveal mínimo (página interna; el JS del home espera elementos que aquí no existen) */
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.sr').forEach(el=>io.observe(el));
+</script>
+</body>
+</html>
