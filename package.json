@@ -1,0 +1,25 @@
+{
+  "name": "pulsefx-web",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview",
+    "sanity:dev": "sanity dev",
+    "sanity:deploy": "sanity deploy"
+  },
+  "dependencies": {
+    "@astrojs/check": "latest",
+    "@astrojs/tailwind": "latest",
+    "@sanity/client": "latest",
+    "astro": "latest",
+    "sanity": "latest",
+    "tailwindcss": "latest",
+    "typescript": "latest"
+  },
+  "devDependencies": {
+    "@types/node": "^26.0.1"
+  }
+}
